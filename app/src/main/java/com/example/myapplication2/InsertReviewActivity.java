@@ -1,15 +1,24 @@
 package com.example.myapplication2;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class InsertReviewActivity extends AppCompatActivity {
+
+    private static final int READ_REQUEST_CODE = 42;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +29,9 @@ public class InsertReviewActivity extends AppCompatActivity {
 
     public void onClickReviewInsert(View view){
         Log.d("insert","등록 테스트");
+
+        //
+//        Context context = getApplicationContext();
 
         Toast.makeText(getApplicationContext(),"테스트",Toast.LENGTH_LONG).show();
 
@@ -39,5 +51,28 @@ public class InsertReviewActivity extends AppCompatActivity {
                     }
                 })
                 .show();
+    }
+    public void onClickImgSelect(View view){
+
+        Intent intentOpenDocu = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intentOpenDocu.addCategory(Intent.CATEGORY_OPENABLE);
+        intentOpenDocu.setType("image/*");
+
+        startActivityForResult(intentOpenDocu, READ_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if ((requestCode == READ_REQUEST_CODE) && (resultCode == Activity.RESULT_OK)) {
+            //
+            Uri uri = null;
+            if (data != null) {
+                uri = data.getData();
+
+                ImageView img =  findViewById(R.id.imageView2);
+
+                img.setImageURI(uri);
+            }
+        }
     }
 }
