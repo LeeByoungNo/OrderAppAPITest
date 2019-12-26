@@ -1,5 +1,6 @@
 package com.example.myapplication2;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,6 +11,12 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import org.json.JSONObject;
 
@@ -83,6 +90,33 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, InsertReviewActivity.class);
 
         startActivity(intent);
+    }
+
+    public void showToken(View view){
+
+        Log.d("fcm","token 값:");
+
+        // CURRENT FCM Token 값 구하기
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>(){
+            @Override
+            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+
+                if (!task.isSuccessful()) {
+                    Log.w("", "getInstanceId failed", task.getException());
+                    return;
+                }
+
+                // Get new Instance ID token
+                String token = task.getResult().getToken();
+
+                // Log and toast
+//                String msg = getString(R.string.msg_token_fmt, token);
+                Log.d("", token);
+                Toast.makeText(MainActivity.this, "token: "+token, Toast.LENGTH_SHORT).show();
+
+
+            }
+        });
     }
 
     public void apiCallTest(View view){
