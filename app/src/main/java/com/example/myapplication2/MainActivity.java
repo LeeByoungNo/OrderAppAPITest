@@ -68,6 +68,62 @@ public class MainActivity extends AppCompatActivity {
            * storeDetail.json : uid (상점ID)
            * showReviewList.json : spCode, pageSize, pageNo
         * */
+
+        /*
+        public static void main(String[] args) {
+
+            // 로그인
+            String userId = "lkj1212@daum.net" ;
+            String userPassword = "rkddb1212" ;
+
+            // 리뷰작성 (reviewInsert.json)
+            String loginKey = "de70dd03-fb91-4d52-9f08-94079bf77fb4" ;
+            String content = "contet 테스트3" ;
+            String spCode = "J00001002000003" ;
+            String grade = "3" ;
+            String file = "" ;
+
+
+            // 리뷰조회  (shopReviewList.json)
+            String pageSize = "10" ;
+            String pageNo = "1" ;
+
+            try {
+
+                // 1. login
+    //			String result = sendPostData("http://localhost:8080/api/login.json","userId="+userId+"&userPwd="+userPassword);
+
+                // 2. 리뷰조회
+    //			String result = sendPostData("http://localhost:8080/api/shopReviewList.json","spCode="+spCode+"&pageSize="+pageSize+"&pageNo="+pageNo);
+
+                Map<String,String> data = new HashMap<String,String>();
+                data.put("spCode", spCode);
+                data.put("content", content);
+                data.put("grade", grade);
+                data.put("userId", userId);
+    //			String result = sendPostDataWithLoginKey("http://localhost:8080/api/reviewInsert.json","spCode="+spCode+"&content="+content+"&grade="+grade+"&userId="+userId,loginKey);
+
+                String filePath = "C:\\Users\\leebn\\Pictures\\img_158639_1.jpg" ;
+
+                String result = sendPostMultiFormData("http://localhost:8080/api/reviewInsert.json",data,loginKey,filePath);
+                JSONObject jsonObj =  new JSONObject(result);
+
+                System.out.println("result = "+result);
+
+                System.out.println("status = "+jsonObj.get("status"));
+
+                if(jsonObj.get("status").equals("1")) {
+                    System.out.println("저장 성공");
+                }else {
+                    System.out.println("저장 실패");
+                }
+
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+	    }
+        * */
     }
 
 
