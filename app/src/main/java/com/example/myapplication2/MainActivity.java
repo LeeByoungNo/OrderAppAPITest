@@ -148,6 +148,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void loginForm(View view){
+        Intent intent = new Intent(this, LoginActivity.class);
+
+        startActivity(intent);
+    }
+
     public void showToken(View view){
 
         Log.d("fcm","token 값:");
@@ -175,15 +181,18 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void apiCallTest(View view){
-        Log.d("API","API CALL TEST clicked");
+    public void apiCallReviewList(View view){
 
         new Thread(){
             public void run(){
-//        HttpURLConnection conn = new HttpURLConnection();
-                String result = callPostAPI("http://192.168.0.3:8090/testApi");
+
+                String spCode = "J00001002000003" ;
+
+                String result = callPostAPI("https://m.delivera.co.kr/api/shopReviewList.json","spCode="+spCode+"&pageSize=5&pageNo=1");
 
                 Log.d("API","RESULT: "+result);
+
+                Toast.makeText(MainActivity.this, "result: "+result, Toast.LENGTH_SHORT).show();
 
                 try{
                     final JSONObject jsonObject = new JSONObject(result);
@@ -208,12 +217,48 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }.start();
+    }
+
+    public void apiCallTest(View view){
+        Log.d("API","API CALL TEST clicked");
+
+        new Thread(){
+            public void run(){
+
+
+                String result = callPostAPI("http://192.168.0.3:8090/testApi","");
+
+                Log.d("API","RESULT: "+result);
+
+                try{
+                    final JSONObject jsonObject = new JSONObject(result);
+
+                    //Log.d("json","status : "+jsonObject.get("status")+", data : "+jsonObject.get("data"));
+
+                    setStatus((String) jsonObject.get("status"));
+//                    String status = (String)jsonObject.get("status");
+
+//                    Handler handler = new Handler(){
+//                        public void handleMessage(Message msg){
+//                            EditText editText = (EditText) findViewById(R.id.editText2);
+//                            editText.setText("status: "+status);
+//                        }
+//                    };
+
+                }catch(Exception e){
+                    Log.d("error",""+e);
+                }
+
+
+
+            }
+        }.start();
 
 
 
     }
 
-    public static String callPostAPI(String urlStr){
+    public static String callPostAPI(String urlStr,String param){
 
         StringBuffer sb = new StringBuffer();
 
