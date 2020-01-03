@@ -148,7 +148,8 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void loginForm(View view){
+    public void loginFormGo(View view){
+
         Intent intent = new Intent(this, LoginActivity.class);
 
         startActivity(intent);
@@ -192,22 +193,12 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.d("API","RESULT: "+result);
 
-                Toast.makeText(MainActivity.this, "result: "+result, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "result: "+result, Toast.LENGTH_SHORT).show();
 
                 try{
                     final JSONObject jsonObject = new JSONObject(result);
 
                     Log.d("json","status : "+jsonObject.get("status")+", data : "+jsonObject.get("data"));
-
-                    setStatus((String) jsonObject.get("status"));
-//                    String status = (String)jsonObject.get("status");
-
-//                    Handler handler = new Handler(){
-//                        public void handleMessage(Message msg){
-//                            EditText editText = (EditText) findViewById(R.id.editText2);
-//                            editText.setText("status: "+status);
-//                        }
-//                    };
 
                 }catch(Exception e){
                     Log.d("error",""+e);
@@ -277,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
             con.setDoOutput(true); //POST 데이터를 OutputStream으로 넘겨 주겠다는 설정
 
             OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
-            wr.write("param1=testParam1");
+            wr.write(param);
             wr.flush();
 
 
