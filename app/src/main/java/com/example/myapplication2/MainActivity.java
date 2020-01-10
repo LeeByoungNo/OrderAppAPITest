@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("SharedPreferences","SharedPreferences's loginKey :"+loginKey+" , refreshKey : "+refreshKey);
         // SharedPreferences GET TEST
 
-
+//        Toast.makeText(MainActivity.this,"SharedPreferences's loginKey :"+loginKey+" , refreshKey : "+refreshKey,Toast.LENGTH_LONG);
 
         // WebView remote debug 설정
 //        getApplicationInfo();
