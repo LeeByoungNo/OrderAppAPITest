@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -33,7 +34,32 @@ public class InsertReviewActivity extends AppCompatActivity {
         //
 //        Context context = getApplicationContext();
 
-        Toast.makeText(getApplicationContext(),"테스트",Toast.LENGTH_LONG).show();
+        EditText userIdEdit = findViewById(R.id.userId);
+        EditText editTextValidatePoints = findViewById(R.id.editTextValidatePoints);
+        EditText editTextContent  = findViewById(R.id.editTextContent);
+
+        String userId = userIdEdit.getText().toString() ;
+        String validatePoints = editTextValidatePoints.getText().toString();
+        String content = editTextContent.getText().toString();
+
+        // validation CHECK
+        if(userId == null || userId.trim().length() == 0){
+
+        }
+        if(validatePoints == null || validatePoints.trim().length() == 0){
+
+        }
+        if(content == null || content.trim().length() == 0){
+
+        }
+        // validation CHECK
+
+        // IMAGE SELECT check
+
+        // IMAGE SELECT check
+
+        Toast.makeText(getApplicationContext(),"uerId : "+userId+" , validatePoints:"+
+                                    validatePoints+" , content : "+content,Toast.LENGTH_LONG).show();
 
         new AlertDialog.Builder(this)
                 .setTitle("리뷰 등록")

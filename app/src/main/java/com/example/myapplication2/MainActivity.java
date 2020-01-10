@@ -193,8 +193,6 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.d("API","RESULT: "+result);
 
-                //Toast.makeText(MainActivity.this, "result: "+result, Toast.LENGTH_SHORT).show();
-
                 try{
                     final JSONObject jsonObject = new JSONObject(result);
 

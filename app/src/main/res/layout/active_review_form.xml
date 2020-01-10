@@ -79,7 +79,7 @@
         android:text="등록" />
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/editTextContent"
         android:layout_width="312dp"
         android:layout_height="262dp"
         android:layout_alignParentTop="true"
@@ -93,7 +93,7 @@
         android:inputType="textMultiLine" />
 
     <EditText
-        android:id="@+id/editText6"
+        android:id="@+id/editTextValidatePoints"
         android:layout_width="317dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -125,16 +125,16 @@
         android:id="@+id/imageView2"
         android:layout_width="298dp"
         android:layout_height="166dp"
-        android:layout_below="@+id/editText3"
+        android:layout_below="@+id/editTextContent"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="7dp"
-        android:layout_marginLeft="7dp"
-        android:layout_marginTop="160dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginBottom="73dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="92dp"
+        android:layout_marginEnd="9dp"
+        android:layout_marginRight="9dp"
+        android:layout_marginBottom="141dp"
         android:layout_toEndOf="@+id/textView6"
         android:layout_toRightOf="@+id/textView6"
         app:srcCompat="@mipmap/ic_launcher" />
