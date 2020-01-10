@@ -2,6 +2,7 @@ package com.example.myapplication2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -59,6 +60,9 @@ public class LoginActivity extends AppCompatActivity {
                             String refreshKey = (String)loginInfo.get("refreshKey");
 
                             Log.d("loginInfo","loginKey:"+loginKey+" , refreshKey:"+refreshKey);
+
+                            /*Intent intent = new Intent(null, MainActivity.class);
+                            startActivity(intent);*/
 
                         }
                     }else{  // 로그인 실패
