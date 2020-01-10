@@ -3,7 +3,9 @@ package com.example.myapplication2;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,6 +34,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // SharedPreferences GET TEST
+        SharedPreferences sharedPref = getSharedPreferences("loginKey", Context.MODE_PRIVATE);
+        String loginKey = sharedPref.getString("loginKey","값 없음");
+        String refreshKey = sharedPref.getString("refreshKey","값 없음");
+
+        Log.d("SharedPreferences","SharedPreferences's loginKey :"+loginKey+" , refreshKey : "+refreshKey);
+        // SharedPreferences GET TEST
+
+
 
         // WebView remote debug 설정
 //        getApplicationInfo();

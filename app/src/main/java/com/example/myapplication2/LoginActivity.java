@@ -2,7 +2,9 @@ package com.example.myapplication2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +23,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login_form);
+
+        // SharedPreferences Write TEST
+        /*SharedPreferences sharedPref = getSharedPreferences("loginKey", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+        editor.putString("loginKey","test");
+        editor.putString("refreshKey","REFRESH KEY");
+        editor.commit();*/
+
     }
 
     public void apiLogin(View view){
@@ -63,6 +74,8 @@ public class LoginActivity extends AppCompatActivity {
 
                             /*Intent intent = new Intent(null, MainActivity.class);
                             startActivity(intent);*/
+
+
 
                         }
                     }else{  // 로그인 실패
