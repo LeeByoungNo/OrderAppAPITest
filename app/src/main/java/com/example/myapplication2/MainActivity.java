@@ -154,6 +154,12 @@ public class MainActivity extends AppCompatActivity {
 //        editText.setText("status: "+status);
     }
 
+    public void uiTestView(View view){
+        Intent intent = new Intent(this, UiTestActivity.class);
+
+        startActivity(intent);
+    }
+
     public void insertReview(View view){
         Intent intent = new Intent(this, InsertReviewActivity.class);
 
