@@ -1,142 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:background="#FFFFFF">
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="93dp"
-        android:layout_height="43dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="1dp"
-        android:layout_marginLeft="1dp"
-        android:layout_marginTop="422dp"
-        android:onClick="onClickImgSelect"
-        android:text="이미지:" />
-
-    <EditText
-        android:id="@+id/userId"
-        android:layout_width="310dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="6dp"
-        android:layout_marginLeft="6dp"
-        android:layout_marginTop="0dp"
-        android:layout_toEndOf="@+id/textView2"
-        android:layout_toRightOf="@+id/textView2"
-        android:ems="10"
-        android:inputType="textPersonName" />
-
+    <!-- USER ID -->
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="93dp"
-        android:layout_height="43dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:text="User ID:" />
-
+    <EditText
+        android:id="@+id/userId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        />
+    <!-- 평점 -->
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="93dp"
-        android:layout_height="43dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="-5dp"
-        android:layout_marginLeft="-5dp"
-        android:layout_marginTop="74dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:text="평점:" />
+    <EditText
+        android:id="@+id/editTextValidatePoints"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
 
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+
+        android:ems="10"
+        android:inputType="number" />
+
+
+    <!-- 내용 -->
     <TextView
         android:id="@+id/textView5"
-        android:layout_width="93dp"
-        android:layout_height="43dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="143dp"
-        android:text="내용:" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"
-        android:onClick="onClickReviewInsert"
-        android:text="등록" />
-
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="내용:" />
     <EditText
         android:id="@+id/editTextContent"
-        android:layout_width="312dp"
-        android:layout_height="262dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="6dp"
-        android:layout_marginLeft="6dp"
-        android:layout_marginTop="143dp"
-        android:layout_toEndOf="@+id/textView5"
-        android:layout_toRightOf="@+id/textView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine" />
 
-    <EditText
-        android:id="@+id/editTextValidatePoints"
-        android:layout_width="317dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="72dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginRight="1dp"
-        android:layout_toEndOf="@+id/textView4"
-        android:layout_toRightOf="@+id/textView4"
-        android:ems="10"
-        android:inputType="number" />
-
+    <!-- 이미지 -->
     <TextView
-        android:id="@+id/textView3"
-        android:layout_width="309dp"
-        android:layout_height="48dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginBottom="261dp"
-        android:layout_toEndOf="@+id/textView6"
-        android:layout_toRightOf="@+id/textView6"
-        android:text="TextView" />
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:onClick="onClickImgSelect"
+        android:text="이미지:" />
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="298dp"
-        android:layout_height="166dp"
-        android:layout_below="@+id/editTextContent"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="92dp"
-        android:layout_marginEnd="9dp"
-        android:layout_marginRight="9dp"
-        android:layout_marginBottom="141dp"
-        android:layout_toEndOf="@+id/textView6"
-        android:layout_toRightOf="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         app:srcCompat="@mipmap/ic_launcher" />
 
-</RelativeLayout>
+
+    <!-- 등록 버튼 -->
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:onClick="onClickReviewInsert"
+        android:text="등록" />
+
+</LinearLayout>
