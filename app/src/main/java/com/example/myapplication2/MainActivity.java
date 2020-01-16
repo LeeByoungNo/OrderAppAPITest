@@ -135,6 +135,12 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 	    }
+
+	    // 배너 테스트 URL
+	    http://img.delivera.co.kr/0000/0000_banner_20200116155000148.jpg
+	    // editor HTML 테스트 URL
+	    http://img.delivera.co.kr/0000/0000_20200116155122624.html
+
         * */
     }
 
