@@ -166,6 +166,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void webViewTest(View view){
+        Intent intent = new Intent(this, WebViewActivity.class);
+
+        startActivity(intent);
+    }
+
     public void insertReview(View view){
         Intent intent = new Intent(this, InsertReviewActivity.class);
 
