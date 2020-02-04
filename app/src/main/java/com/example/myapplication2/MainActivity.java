@@ -172,6 +172,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void adListTest(View view){
+        Intent intent = new Intent(this, AdListActivity.class);
+
+        startActivity(intent);
+    }
+
     public void insertReview(View view){
         Intent intent = new Intent(this, InsertReviewActivity.class);
 
