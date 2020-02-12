@@ -26,6 +26,7 @@ public class ShopReviewListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_review_list);
 
+
         Log.d("test","ShopReviewListActivity's onCreate...");
 
         recyclerView = findViewById(R.id.shop_review_list);
@@ -38,7 +39,7 @@ public class ShopReviewListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
 
-        String[] mDataset = new String[]{"A","B","C"};
+        String[] mDataset = new String[]{"A","B","C","A","B","C","A","B","C","A","B","C","A","B","C","A","B","C"};
 
         mAdapter = new MyAdapter(mDataset);
 
