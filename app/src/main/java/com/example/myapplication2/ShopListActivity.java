@@ -5,11 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.myapplication2.util.HttpUtil;
@@ -17,6 +21,9 @@ import com.example.myapplication2.util.HttpUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +62,7 @@ public class ShopListActivity extends AppCompatActivity {
 
                 try{
 
-                    String result = HttpUtil.sendPostData("https://m.delivera.co.kr/api/shopReviewList.json","spCode="+spCode+"&pageSize=20&pageNo=1");
+                    String result = HttpUtil.sendPostData("https://m.delivera.co.kr/api/storeListDeli.json","type=1&x=37.4732219&y=126.8843009&pageSize=20&pageNo=1");
 
                     Log.d("API","RESULT: "+result);
                     final JSONObject jsonObject = new JSONObject(result);
@@ -66,21 +73,15 @@ public class ShopListActivity extends AppCompatActivity {
                         JSONArray data = jsonObject.getJSONArray("data");
                         if(data != null) {
                             for(int j=0; j < data.length() ; j++) {
-                                JSONObject reviewInfo = data.getJSONObject(j);
-
+                                JSONObject shopInfo = data.getJSONObject(j);
                                 //
-                                Log.d("리뷰 테스트: 내용 => ",j+":" +reviewInfo.getString("content"));
-
-//                                reviewList.add(reviewInfo);
-                                shopList.add(reviewInfo);
+                                Log.d("상점 테스트: 내용 => ",j+":" +shopInfo.getString("spCode"));
+                                shopList.add(shopInfo);
                             }
 
                         }
 
                     }
-
-                    /*mAdapter = new MyAdapter(reviewList);
-                    recyclerView.setAdapter(mAdapter);*/
 
                     mAdapter.notifyDataSetChanged();
 
@@ -136,17 +137,60 @@ public class ShopListActivity extends AppCompatActivity {
             JSONObject shopInfo ;
 
             public TextView mShopName ;
+            public ImageView mShopImage ;
+
+            private Bitmap mShopBitmap ;
 
             public ShopItemHolder(@NonNull View itemView) {
                 super(itemView);
 
                 mShopName = itemView.findViewById(R.id.shop_name);
+                mShopImage = itemView.findViewById(R.id.shop_image_path);
             }
 
             public void bindHolderShop(JSONObject shopInfo){
                 this.shopInfo = shopInfo ;
 
-                mShopName.setText("TEST");
+                try{
+
+                    mShopName.setText(shopInfo.getString("spName"));
+
+                    /*Uri uriShopImage = new Uri("");
+
+                    mShopImage.setImageURI("https://m.delivera.co.kr/img/store_noimg_color.gif");*/
+                    final String adminPathImage = "https://m.delivera.co.kr/img/store_noimg_color.gif" ;
+
+                    Thread mThread = new Thread(){
+                        @Override
+                        public void run() {
+
+                            try{
+                                //
+                                URL url = new URL(adminPathImage);
+
+                                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                conn.connect();
+
+                                InputStream is = conn.getInputStream();
+                                mShopBitmap = BitmapFactory.decodeStream(is);
+
+                            }catch (Exception e){
+
+                            }
+
+                        }
+                    };
+
+                    mThread.run();
+
+                    mThread.join();
+                    mShopImage.setImageBitmap(mShopBitmap);
+
+
+                }catch (Exception e){
+
+                }
+
 
             }
         }
