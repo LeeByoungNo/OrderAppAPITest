@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.myapplication2.util.HttpUtil;
 
 import org.json.JSONArray;
@@ -146,45 +148,42 @@ public class ShopListActivity extends AppCompatActivity {
 
                 mShopName = itemView.findViewById(R.id.shop_name);
                 mShopImage = itemView.findViewById(R.id.shop_image_path);
+
+
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //
+                        Log.d("Holder","click event handler...");
+
+
+                    }
+                });
+
             }
+
+
 
             public void bindHolderShop(JSONObject shopInfo){
                 this.shopInfo = shopInfo ;
 
                 try{
 
+                    // 상점명
                     mShopName.setText(shopInfo.getString("spName"));
 
-                    /*Uri uriShopImage = new Uri("");
+                    // 이미지 없음 image ( default로 출력 )
+                    String adminPathImage = "https://m.delivera.co.kr/img/store_noimg_color.gif" ;
+                    String imgPath = shopInfo.getString("adminPathImage");
 
-                    mShopImage.setImageURI("https://m.delivera.co.kr/img/store_noimg_color.gif");*/
-                    final String adminPathImage = "https://m.delivera.co.kr/img/store_noimg_color.gif" ;
+                    if(false == shopInfo.isNull("adminPathImage") && false == imgPath.trim().equals("")){
+                        adminPathImage = imgPath ;
+                    }
 
-                    Thread mThread = new Thread(){
-                        @Override
-                        public void run() {
+                    // 상점 image 표출
+                    Glide.with(getApplicationContext()).load(adminPathImage).into(mShopImage);
 
-                            try{
-                                //
-                                URL url = new URL(adminPathImage);
 
-                                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                                conn.connect();
-
-                                InputStream is = conn.getInputStream();
-                                mShopBitmap = BitmapFactory.decodeStream(is);
-
-                            }catch (Exception e){
-
-                            }
-
-                        }
-                    };
-
-                    mThread.run();
-
-                    mThread.join();
-                    mShopImage.setImageBitmap(mShopBitmap);
 
 
                 }catch (Exception e){
