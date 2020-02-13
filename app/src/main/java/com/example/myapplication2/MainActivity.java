@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("fcm","token 값:");
 
         // CURRENT FCM Token 값 구하기
-        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>(){
+        /*FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>(){
             @Override
             public void onComplete(@NonNull Task<InstanceIdResult> task) {
 
@@ -215,12 +215,12 @@ public class MainActivity extends AppCompatActivity {
 
 
             }
-        });
+        });*/
     }
 
     public void apiCallReviewList(View view){
 
-        new Thread(){
+        /*new Thread(){
             public void run(){
 
                 String spCode = "J00001002000003" ;
@@ -241,7 +241,13 @@ public class MainActivity extends AppCompatActivity {
 
 
             }
-        }.start();
+        }.start();*/
+
+        //
+        Intent intent = new Intent(this, ShopReviewListActivity.class);
+
+        startActivity(intent);
+
     }
 
     public void apiCallTest(View view){
