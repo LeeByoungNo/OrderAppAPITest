@@ -17,6 +17,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.myapplication2.util.HttpUtil;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class InsertReviewActivity extends AppCompatActivity {
 
     private static final int READ_REQUEST_CODE = 42;
@@ -73,7 +78,19 @@ public class InsertReviewActivity extends AppCompatActivity {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        //
+                        Map<String,String> params = new HashMap<String,String>();
+                        params.put("userId","lkj1212@daum.net");
+                        params.put("content","테스트 from Android");
+                        params.put("spCode","J00001002000003");
+                        params.put("grade","1");
 
+
+                        /*try {
+                            HttpUtil.sendPostMultiFormData("https://m.delivera.co.kr/api/reviweInsert.json", params, "", "");  // File 대신 Uri로 변경 필요
+                        }catch (Exception e){
+                            Log.e("리뷰작성",""+e);
+                        }*/
                     }
                 })
                 .show();
