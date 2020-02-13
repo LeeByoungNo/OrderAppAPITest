@@ -13,6 +13,14 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.myapplication2.util.HttpUtil;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class ShopReviewListActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView ;
@@ -38,18 +46,64 @@ public class ShopReviewListActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
+//       final List<String> reviewList = new ArrayList<String>();
 
-        String[] mDataset = new String[]{"A","B","C","A","B","C","A","B","C","A","B","C","A","B","C","A","B","C"};
+        final List<JSONObject> reviewList = new ArrayList<JSONObject>();
 
-        mAdapter = new MyAdapter(mDataset);
+        new Thread(){
+            public void run(){
+
+                String spCode = "J00001002000003" ;
+
+                try{
+
+                    String result = HttpUtil.sendPostData("https://m.delivera.co.kr/api/shopReviewList.json","spCode="+spCode+"&pageSize=20&pageNo=1");
+
+                    Log.d("API","RESULT: "+result);
+                    final JSONObject jsonObject = new JSONObject(result);
+
+                    //
+                    if(jsonObject.get("status").equals("1")) {
+
+                        JSONArray data = jsonObject.getJSONArray("data");
+                        if(data != null) {
+                            for(int j=0; j < data.length() ; j++) {
+                                JSONObject reviewInfo = data.getJSONObject(j);
+
+                                //
+                                Log.d("리뷰 테스트: 내용 => ",j+":" +reviewInfo.getString("content"));
+
+                                reviewList.add(reviewInfo);
+                            }
+
+                        }
+
+                    }
+
+                    /*mAdapter = new MyAdapter(reviewList);
+                    recyclerView.setAdapter(mAdapter);*/
+
+                    mAdapter.notifyDataSetChanged();
+
+                }catch(Exception e){
+                    Log.d("error",""+e);
+                }
+
+
+
+            }
+        }.start();
+
+        mAdapter = new MyAdapter(reviewList);
+        recyclerView.setAdapter(mAdapter);
 
     }
 
     private class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
 
-        private String[] mDataset;
+        private List<JSONObject> mDataset;
 
-        public MyAdapter(String[] dataset) {
+        public MyAdapter(List<JSONObject> dataset) {
             mDataset = dataset;
         }
 
@@ -67,12 +121,22 @@ public class ShopReviewListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-            holder.mTitle.setText(mDataset[position]);
+
+            JSONObject reviewInfo = mDataset.get(position) ;
+
+            try {
+                holder.mTitle.setText(reviewInfo.getString("userId"));
+                holder.mContent.setText(reviewInfo.getString("content"));
+                holder.mRegDate.setText(reviewInfo.getString("regDateFormatted"));
+
+            }catch (Exception e){
+
+            }
         }
 
         @Override
         public int getItemCount() {
-            return mDataset.length ;
+            return mDataset.size() ;
 
         }
 
@@ -81,11 +145,15 @@ public class ShopReviewListActivity extends AppCompatActivity {
         public class MyViewHolder extends RecyclerView.ViewHolder{
 
             public TextView mTitle ;
+            public TextView mContent ;
+            public TextView mRegDate ;
 
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
 
-                mTitle = itemView.findViewById(R.id.list_item_review);
+                mTitle = itemView.findViewById(R.id.review_item_user_id);
+                mContent = itemView.findViewById(R.id.review_item_content);
+                mRegDate = itemView.findViewById(R.id.review_item_reg_date);
 
             }
         }
