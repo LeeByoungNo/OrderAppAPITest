@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
@@ -205,6 +206,10 @@ public class AdListActivity extends AppCompatActivity {
 
                             }else if(linkType.equals("O")){  // 외부 URL
                                 Toast.makeText(AdListActivity.this, "외부 URL입니다.", Toast.LENGTH_SHORT).show();
+
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(htmlUrl));
+                                startActivity(browserIntent);
+
                             }else if(linkType.equals("A")){  // 주문앱의 상점Activity
                                 Toast.makeText(AdListActivity.this, "주문앱 상점 으로 이동", Toast.LENGTH_SHORT).show();
                             }
