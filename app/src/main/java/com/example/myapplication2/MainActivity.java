@@ -166,12 +166,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void webViewTest(View view){
-        Intent intent = new Intent(this, WebViewActivity.class);
-
-        startActivity(intent);
-    }
-
     public void adListTest(View view){
         Intent intent = new Intent(this, AdListActivity.class);
 

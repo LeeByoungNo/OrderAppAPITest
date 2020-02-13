@@ -192,12 +192,15 @@ public class AdListActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         try {
                             String linkType =  advInfo.getString("linkType");
+                            String htmlUrl = advInfo.getString("htmlUrl");
 
                             Log.d("DBUG","linkType : "+linkType);
 
                             if(linkType.equals("I")){  // 내부 URL
                                 //
                                 Intent intent = new Intent(getApplication(), WebViewActivity.class);
+
+                                intent.putExtra("htmlUrl",htmlUrl);
                                 startActivity(intent);
 
                             }else if(linkType.equals("O")){  // 외부 URL
