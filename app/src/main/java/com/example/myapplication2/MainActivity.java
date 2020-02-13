@@ -250,6 +250,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void callShopList(View view){
+
+        Intent intent = new Intent(this, ShopListActivity.class);
+
+        startActivity(intent);
+    }
+
     public void apiCallTest(View view){
         Log.d("API","API CALL TEST clicked");
 
