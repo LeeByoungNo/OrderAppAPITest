@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,10 @@ public class ShopListActivity extends AppCompatActivity {
 
     private RecyclerView.Adapter mAdapter ;
 
+    // Handler TEST ==================
+    private Handler myHandler ;
+    // Handler TEST ==================
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +49,10 @@ public class ShopListActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.shop_list);
 
         Log.d("상점목록","recylerView find.."+recyclerView);
+
+        // Handler TEST ==================
+        myHandler = new Handler();
+        // Handler TEST ==================
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -80,19 +89,13 @@ public class ShopListActivity extends AppCompatActivity {
                                 Log.d("상점 테스트: 내용 => ",j+":" +shopInfo.getString("spCode"));
                                 shopList.add(shopInfo);
                             }
-
                         }
-
                     }
-
                     mAdapter.notifyDataSetChanged();
 
                 }catch(Exception e){
                     Log.d("error",""+e);
                 }
-
-
-
             }
         }.start();
 
@@ -156,6 +159,18 @@ public class ShopListActivity extends AppCompatActivity {
                         //
                         Log.d("Holder","click event handler...");
 
+                        Intent intent = new Intent(getApplication(), ShopReviewListActivity.class);
+                        startActivity(intent);
+
+                        // Handler TEST ==================
+                        /*myHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent intent = new Intent(getApplication(), ShopReviewListActivity.class);
+                                startActivity(intent);
+                            }
+                        });*/
+                        // Handler TEST ==================
 
                     }
                 });

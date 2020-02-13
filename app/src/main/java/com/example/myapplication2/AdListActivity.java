@@ -1,20 +1,32 @@
 package com.example.myapplication2;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.myapplication2.util.HttpUtil;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,8 +35,10 @@ import java.util.Map;
 
 public class AdListActivity extends AppCompatActivity {
 
-    private List<String> list = new ArrayList<>();
-    private ArrayAdapter<String> adapter ;
+    private RecyclerView recyclerView ;
+    private RecyclerView.LayoutManager layoutManager;
+
+    private RecyclerView.Adapter adListAdapter ;
 
     @Override
     protected void onResume() {
@@ -47,11 +61,18 @@ public class AdListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.advertise_list);
-
-        ListView listview = findViewById(R.id.listview) ;
+        recyclerView = findViewById(R.id.advertise_list);
 
         //데이터를 저장하게 되는 리스트
 
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        recyclerView.setHasFixedSize(true);
+
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        final List<JSONObject> advertiseList = new ArrayList<JSONObject>();
 
         // data GET =================================================================
         new Thread(){
@@ -73,21 +94,11 @@ public class AdListActivity extends AppCompatActivity {
                             for(int j=0; j < data.length() ; j++) {
 
                                 JSONObject adInfo = data.getJSONObject(j);
-
-
                                 Log.d("debug",adInfo.get("subject")+""+adInfo.get("regDate"));
 
-                                list.add((String)adInfo.get("subject"));
-
-                                Map<String,String> dataInfo = new HashMap<>();
-                                dataInfo.put("html_url", (String)adInfo.get("htmlUrl"));
-                                dataInfo.put("link_type", (String)adInfo.get("linkType"));
-                                dataInfo.put("banner_url", (String)adInfo.get("bannerUrl"));
-
+                                advertiseList.add(adInfo);
                             }
                         }
-
-
                     }
 
                     // 일반광고
@@ -100,34 +111,18 @@ public class AdListActivity extends AppCompatActivity {
 
                         if(data != null) {
                             for(int j=0; j < data.length() ; j++) {
-
                                 JSONObject adInfo = data.getJSONObject(j);
-
-                                /*TableItem tableItem = new TableItem(tablePublicAdList, SWT.NONE);
-                                tableItem.setText(new String[]{adInfo.get("subject")+"",adInfo.get("regDate")+""});*/
-
-                                list.add((String)adInfo.get("subject"));
-
-                                Map<String,String> dataInfo = new HashMap<String,String>();
-
-
-
                                 // null check
-                                if(false == adInfo.isNull("htmlUrl")) {
+                                /*if(false == adInfo.isNull("htmlUrl")) {
                                     dataInfo.put("html_url", (String)adInfo.get("htmlUrl"));
-                                }
-                                dataInfo.put("link_type", (String)adInfo.get("linkType"));
-                                dataInfo.put("banner_url", (String)adInfo.get("bannerUrl"));
-                                dataInfo.put("adv_type", (String)adInfo.get("advType"));
-                                dataInfo.put("spCode", (String)adInfo.get("spCode"));
-
-
+                                }*/
+                                advertiseList.add(adInfo);
                             }
                         }
                     }
                     // 일반광고
 
-                    adapter.notifyDataSetChanged();
+                    adListAdapter.notifyDataSetChanged();
 
                 }catch(Exception e){
                     Log.d("error",""+e);
@@ -136,25 +131,103 @@ public class AdListActivity extends AppCompatActivity {
         }.start();
         // data GET =================================================================
 
-        //리스트뷰와 리스트를 연결하기 위해 사용되는 어댑터
-        adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, list);
+        Log.d("DEBUG","onCreate 's "+advertiseList.size());
 
-        //리스트뷰의 어댑터를 지정해준다.
-        listview.setAdapter(adapter);
+        adListAdapter = new AdListAdapter(advertiseList);
+        recyclerView.setAdapter(adListAdapter);
+    }
 
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //클릭한 아이템의 문자열을 가져옴
-                String selected_item = (String)parent.getItemAtPosition(position);
+    private class AdListAdapter extends RecyclerView.Adapter<AdListAdapter.AdInfoHolder>{
+
+        private List<JSONObject> mAdvList;
+
+        public AdListAdapter(List<JSONObject> mAdvList) {
+
+            Log.d("DEBUG::::","AdListAdapter's constructor..."+mAdvList.size());
+
+            this.mAdvList = mAdvList;
+        }
+
+        @NonNull
+        @Override
+        public AdInfoHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+            View v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.activity_advertise_item,parent,false);
+
+            AdInfoHolder holder = new AdInfoHolder(v);
+
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull AdInfoHolder holder, int position) {
+            JSONObject advertiseInfo = mAdvList.get(position);
+
+            Log.d("DEBUG::::","AdListAdapter's onBindViewHolder...");
+
+            holder.bindHolderAdvertisement(advertiseInfo);
+        }
+
+        @Override
+        public int getItemCount() {
+            return (mAdvList != null ? mAdvList.size() : 0) ;
+        }
+
+        public class AdInfoHolder extends RecyclerView.ViewHolder{
+
+            private JSONObject advInfo ;
+
+            private TextView subject ;
+            private ImageView banner ;
+
+            public AdInfoHolder(@NonNull View itemView) {
+                super(itemView);
+
+                subject = itemView.findViewById(R.id.advertise_subject);
+                banner = itemView.findViewById(R.id.advertise_banner_image);
+
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            String linkType =  advInfo.getString("linkType");
+
+                            Log.d("DBUG","linkType : "+linkType);
+
+                            if(linkType.equals("I")){  // 내부 URL
+                                //
+                                Intent intent = new Intent(getApplication(), WebViewActivity.class);
+                                startActivity(intent);
+
+                            }else if(linkType.equals("O")){  // 외부 URL
+                                Toast.makeText(AdListActivity.this, "외부 URL입니다.", Toast.LENGTH_SHORT).show();
+                            }else if(linkType.equals("A")){  // 주문앱의 상점Activity
+                                Toast.makeText(AdListActivity.this, "주문앱 상점 으로 이동", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
-        });
 
-        //리스트뷰에 보여질 아이템을 추가
-       /* list.add("사과");
-        list.add("배");
-        list.add("귤");
-        list.add("바나나");*/
+            public void bindHolderAdvertisement(JSONObject advInfo){
+
+                this.advInfo = advInfo ;
+
+                Log.d("debug","bindHolderAdvertisement");
+
+                try {
+                    subject.setText(advInfo.getString("subject"));
+
+                    Glide.with(getApplicationContext()).load(advInfo.getString("bannerUrl")).into(banner);
+
+                }catch (Exception e){
+
+                }
+            }
+        }
     }
 }
