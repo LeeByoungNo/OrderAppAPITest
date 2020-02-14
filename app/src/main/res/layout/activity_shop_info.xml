@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/shop_info_shop_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        />
+
+    <TextView
+        android:id="@+id/shop_info_open_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/shop_info_shop_image"
+        />
+    <TextView
+        android:id="@+id/shop_info_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/shop_info_shop_image"
+        android:layout_below="@id/shop_info_open_time"
+        />
+    <TextView
+        android:id="@+id/shop_info_pay_method"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/shop_info_address"
+        />
+    <TextView
+        android:id="@+id/shop_info_other_etc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/shop_info_shop_image"
+        />
+
+    <!--<Space
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/shop_info_other_etc"
+        android:foreground="@android:color/black"
+        android:background="@android:color/black"
+        />-->
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@id/shop_info_other_etc"
+        android:layout_weight="1"
+        android:background="@android:color/black"
+        />
+
+</RelativeLayout>

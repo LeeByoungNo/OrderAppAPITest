@@ -10,7 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ShopListActivity"></activity>
+        <activity android:name=".ShopInfoActivity"></activity>
+        <activity android:name=".ShopListActivity" />
         <activity android:name=".ShopReviewListActivity" />
         <activity android:name=".AdListActivity" />
         <activity android:name=".WebViewActivity" />

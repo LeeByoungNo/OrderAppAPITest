@@ -157,14 +157,20 @@ public class ShopListActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         //
-                        Log.d("Holder","click event handler...");
 
-                        Intent intent = new Intent(getApplication(), ShopReviewListActivity.class);
+                        Intent intent = new Intent(getApplication(), ShopInfoActivity.class);
+
+                        try {
+                            intent.putExtra("uid", shopInfo.getString("uid"));
+                        }catch (Exception e){
+
+                        }
+
                         startActivity(intent);
 
                         // Handler TEST ==================
                         /*myHandler.post(new Runnable() {
-                            @Override
+                            @OverrideadminPathImage
                             public void run() {
                                 Intent intent = new Intent(getApplication(), ShopReviewListActivity.class);
                                 startActivity(intent);

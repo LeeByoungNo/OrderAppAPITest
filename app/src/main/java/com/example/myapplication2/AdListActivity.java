@@ -195,6 +195,7 @@ public class AdListActivity extends AppCompatActivity {
                             String linkType =  advInfo.getString("linkType");
                             String htmlUrl = advInfo.getString("htmlUrl");
 
+
                             Log.d("DBUG","linkType : "+linkType);
 
                             if(linkType.equals("I")){  // 내부 URL
@@ -212,6 +213,13 @@ public class AdListActivity extends AppCompatActivity {
 
                             }else if(linkType.equals("A")){  // 주문앱의 상점Activity
                                 Toast.makeText(AdListActivity.this, "주문앱 상점 으로 이동", Toast.LENGTH_SHORT).show();
+
+                                Intent intent = new Intent(getApplication(), ShopInfoActivity.class);
+
+                                String spCode = advInfo.getString("spCode");
+
+                                intent.putExtra("spCode",spCode);
+                                startActivity(intent);
                             }
 
                         } catch (JSONException e) {
