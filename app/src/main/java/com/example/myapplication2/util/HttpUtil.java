@@ -148,4 +148,55 @@ public class HttpUtil {
 
         return result ;
     }
+
+    public static String sendGetData(String apiUrl,String data) throws Exception {
+
+        BufferedReader br = null;
+        String result = "" ;
+
+        try {
+            URL url = new URL(apiUrl);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+
+
+            conn.setRequestMethod("GET"); // 보내는 타입
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            conn.setRequestProperty("Accept", "application/json");
+
+            byte[] bytePostData	= data.getBytes(); // encoding
+            int postDataLength	= bytePostData.length;
+            conn.setRequestProperty("Content-Length", Integer.toString(postDataLength));
+            conn.setUseCaches(false);
+            conn.getOutputStream().write(bytePostData);
+
+            OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream());
+
+            // Data setting
+            osw.write(data);
+
+            // Data 전송
+//			osw.flush();
+
+            int statusCode = conn.getResponseCode() ;
+
+            // Return Data 수신
+            br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+            String line;
+            while((line = br.readLine()) != null) {
+                result = result + line.trim();
+            }
+        }catch(Exception e) {
+            throw e ;
+        }finally {
+            if(br != null) {
+                br.close();
+            }
+        }
+
+        return result ;
+    }
 }

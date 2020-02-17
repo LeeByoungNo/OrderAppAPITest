@@ -83,6 +83,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void goMainAcitivity(View view){
+        Intent intent = new Intent(this, AppMainUiActivity.class);
+
+        startActivity(intent);
+    }
+
     public void insertReview(View view){
         Intent intent = new Intent(this, InsertReviewActivity.class);
 
