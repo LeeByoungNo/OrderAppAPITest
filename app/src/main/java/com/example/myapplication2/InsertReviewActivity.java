@@ -9,6 +9,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +20,9 @@ import android.widget.Toast;
 
 import com.example.myapplication2.util.HttpUtil;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,10 +30,21 @@ public class InsertReviewActivity extends AppCompatActivity {
 
     private static final int READ_REQUEST_CODE = 42;
 
+    private EditText userIdEdit ;
+    private EditText editTextValidatePoints ;
+    private EditText editTextContent ;
+    private ImageView replyImageView ;
+    private Uri uri = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.active_review_form);
+
+        userIdEdit = findViewById(R.id.userId);
+        editTextValidatePoints = findViewById(R.id.editTextValidatePoints);
+        editTextContent  = findViewById(R.id.editTextContent);
+        replyImageView =  findViewById(R.id.imageView2);
     }
 
 
@@ -39,13 +54,11 @@ public class InsertReviewActivity extends AppCompatActivity {
         //
 //        Context context = getApplicationContext();
 
-        EditText userIdEdit = findViewById(R.id.userId);
-        EditText editTextValidatePoints = findViewById(R.id.editTextValidatePoints);
-        EditText editTextContent  = findViewById(R.id.editTextContent);
+
 
         String userId = userIdEdit.getText().toString() ;
-        String validatePoints = editTextValidatePoints.getText().toString();
-        String content = editTextContent.getText().toString();
+        final String validatePoints = editTextValidatePoints.getText().toString();
+        final String content = editTextContent.getText().toString();
 
         // validation CHECK
         if(userId == null || userId.trim().length() == 0){
@@ -57,6 +70,8 @@ public class InsertReviewActivity extends AppCompatActivity {
         if(content == null || content.trim().length() == 0){
 
         }
+
+//        replyImageView.get
         // validation CHECK
 
         // IMAGE SELECT check
@@ -79,18 +94,36 @@ public class InsertReviewActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //
-                        Map<String,String> params = new HashMap<String,String>();
-                        params.put("userId","lkj1212@daum.net");
-                        params.put("content","테스트 from Android");
-                        params.put("spCode","J00001002000003");
-                        params.put("grade","1");
+                        new Thread(){
+                            public void run(){
+
+                                SharedPreferences sharedPref = getSharedPreferences("loginKey", Context.MODE_PRIVATE);
+                                String userId = sharedPref.getString("userId","");
+                                String loginKey = sharedPref.getString("loginKey","");
+                                String refreshKey = sharedPref.getString("refreshKey","");
 
 
-                        /*try {
-                            HttpUtil.sendPostMultiFormData("https://m.delivera.co.kr/api/reviweInsert.json", params, "", "");  // File 대신 Uri로 변경 필요
-                        }catch (Exception e){
-                            Log.e("리뷰작성",""+e);
-                        }*/
+                                Map<String,String> params = new HashMap<String,String>();
+                                params.put("userId",userId);
+                                params.put("content",content);
+                                params.put("spCode","J00001002000003");
+                                params.put("grade",validatePoints);
+
+                                try{
+                                    String result = HttpUtil.sendPostMultiFormData("https://m.delivera.co.kr/api/reviewInsert.json", params, loginKey, uri,getBaseContext());  // File 대신 Uri로 변경 필요
+
+                                    JSONObject jsonObj =  new JSONObject(result);
+
+                                    Log.d("DEBUG::","status : "+jsonObj.get("status"));
+
+                                }catch(Exception e){
+                                    Log.e("리뷰작성",""+e);
+                                }
+
+                            }
+                        }.start();
+
+
                     }
                 })
                 .show();
@@ -108,13 +141,11 @@ public class InsertReviewActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if ((requestCode == READ_REQUEST_CODE) && (resultCode == Activity.RESULT_OK)) {
             //
-            Uri uri = null;
+
             if (data != null) {
                 uri = data.getData();
 
-                ImageView img =  findViewById(R.id.imageView2);
-
-                img.setImageURI(uri);
+                replyImageView.setImageURI(uri);
             }
         }
     }
