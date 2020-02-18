@@ -155,7 +155,7 @@ public class HttpUtil {
                 writer.flush();
 
 
-                byte[] buffer = getBytes(null,fileUri);
+                byte[] buffer = getBytes(context,fileUri);
 
                 /*FileInputStream inputStream = new FileInputStream(file);
 
