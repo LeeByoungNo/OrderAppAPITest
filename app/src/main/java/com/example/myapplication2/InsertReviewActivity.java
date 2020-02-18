@@ -94,36 +94,33 @@ public class InsertReviewActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //
-                        new Thread(){
-                            public void run(){
+                    new Thread(){
+                        public void run(){
 
-                                SharedPreferences sharedPref = getSharedPreferences("loginKey", Context.MODE_PRIVATE);
-                                String userId = sharedPref.getString("userId","");
-                                String loginKey = sharedPref.getString("loginKey","");
-                                String refreshKey = sharedPref.getString("refreshKey","");
+                            SharedPreferences sharedPref = getSharedPreferences("loginKey", Context.MODE_PRIVATE);
+                            String userId = sharedPref.getString("userId","");
+                            String loginKey = sharedPref.getString("loginKey","");
+                            String refreshKey = sharedPref.getString("refreshKey","");
 
+                            Map<String,String> params = new HashMap<String,String>();
+                            params.put("userId",userId);
+                            params.put("content",content);
+                            params.put("spCode","J00001002000003");
+                            params.put("grade",validatePoints);
 
-                                Map<String,String> params = new HashMap<String,String>();
-                                params.put("userId",userId);
-                                params.put("content",content);
-                                params.put("spCode","J00001002000003");
-                                params.put("grade",validatePoints);
+                            try{
+                                String result = HttpUtil.sendPostMultiFormData("https://m.delivera.co.kr/api/reviewInsert.json", params, loginKey, uri,getBaseContext());  // File 대신 Uri로 변경 필요
 
-                                try{
-                                    String result = HttpUtil.sendPostMultiFormData("https://m.delivera.co.kr/api/reviewInsert.json", params, loginKey, uri,getBaseContext());  // File 대신 Uri로 변경 필요
+                                JSONObject jsonObj =  new JSONObject(result);
 
-                                    JSONObject jsonObj =  new JSONObject(result);
+                                Log.d("DEBUG::","status : "+jsonObj.get("status"));
 
-                                    Log.d("DEBUG::","status : "+jsonObj.get("status"));
-
-                                }catch(Exception e){
-                                    Log.e("리뷰작성",""+e);
-                                }
-
+                            }catch(Exception e){
+                                Log.e("리뷰작성",""+e);
                             }
-                        }.start();
 
-
+                        }
+                    }.start();
                     }
                 })
                 .show();
