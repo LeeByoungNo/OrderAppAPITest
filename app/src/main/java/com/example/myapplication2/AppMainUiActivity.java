@@ -1,7 +1,9 @@
 package com.example.myapplication2;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
 import com.example.myapplication2.util.HttpUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -28,6 +30,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.Menu;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -140,12 +144,13 @@ public class AppMainUiActivity extends AppCompatActivity {
 
         JSONObject categoryInfo ;
 
-        public Button mCategoryButton ;
+        public ImageButton mCategoryButton ;
 
         public ShopCateogryHolder(@NonNull View itemView) {
             super(itemView);
 
             mCategoryButton = itemView.findViewById(R.id.shop_category_element);
+
 
 
         }
@@ -154,7 +159,31 @@ public class AppMainUiActivity extends AppCompatActivity {
             this.categoryInfo = categoryInfo ;
 
             try {
-                mCategoryButton.setText(categoryInfo.getString("codeName"));
+
+//                mCategoryButton.setText(categoryInfo.getString("codeName"));
+//                mCategoryButton.setBackground(Drawable);
+
+                String code = categoryInfo.getString("code");
+
+                int codeInt = Integer.parseInt(code);
+
+                Glide.with(getApplicationContext()).load("https://m.delivera.co.kr/img/bt0"+(codeInt+1)+".jpg").into(mCategoryButton);
+
+                final String codeToSearch = code ;
+
+
+                mCategoryButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+//                    Toast.makeText(AppMainUiActivity.this, "상점 목록으로 이동(CODE:"+codeToSearch+")", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplication(), ShopListActivity.class);
+
+                        intent.putExtra("type",codeToSearch);
+                        startActivity(intent);
+                    }
+                });
+
             }catch (Exception e){
 
             }

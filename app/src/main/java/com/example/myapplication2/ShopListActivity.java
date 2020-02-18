@@ -50,6 +50,18 @@ public class ShopListActivity extends AppCompatActivity {
 
         Log.d("상점목록","recylerView find.."+recyclerView);
 
+        Intent intent = getIntent();
+
+        String shopCategoryCode = "0" ;
+
+        if(intent != null &&  intent.getExtras() != null && intent.getExtras().getString("type") != null){
+            shopCategoryCode = intent.getExtras().getString("type");
+        }
+
+        final String toSearchType = shopCategoryCode ;
+
+        Log.d("DEBUG::","parameter's type : "+toSearchType);
+
         // Handler TEST ==================
         myHandler = new Handler();
         // Handler TEST ==================
@@ -73,7 +85,7 @@ public class ShopListActivity extends AppCompatActivity {
 
                 try{
 
-                    String result = HttpUtil.sendPostData("https://m.delivera.co.kr/api/storeListDeli.json","type=1&x=37.4732219&y=126.8843009&pageSize=20&pageNo=1");
+                    String result = HttpUtil.sendPostData("https://m.delivera.co.kr/api/storeListDeli.json","type="+(toSearchType.equals("0")?"":toSearchType)+"&x=37.4732219&y=126.8843009&pageSize=20&pageNo=1");
 
                     Log.d("API","RESULT: "+result);
                     final JSONObject jsonObject = new JSONObject(result);

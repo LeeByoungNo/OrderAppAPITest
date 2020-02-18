@@ -12,7 +12,7 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".AppMainUiActivity"
-            android:label="@string/title_activity_app_main_ui"
+            android:label="테스트"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".ShopInfoActivity" />
         <activity android:name=".ShopListActivity" />

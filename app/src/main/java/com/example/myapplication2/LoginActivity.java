@@ -72,10 +72,19 @@ public class LoginActivity extends AppCompatActivity {
 
                             Log.d("loginInfo","loginKey:"+loginKey+" , refreshKey:"+refreshKey);
 
+                            // 로그인 세션 정보 저장 ======================================================
+                            SharedPreferences sharedPref = getSharedPreferences("loginKey", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+
+                            editor.putString("userId",id);
+                            editor.putString("loginKey",loginKey);
+                            editor.putString("refreshKey",refreshKey);
+
+                            editor.commit();
+                            // 로그인 세션 정보 저장 ======================================================
+
                             /*Intent intent = new Intent(null, MainActivity.class);
                             startActivity(intent);*/
-
-
 
                         }
                     }else{  // 로그인 실패

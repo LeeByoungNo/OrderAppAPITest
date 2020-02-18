@@ -15,11 +15,13 @@ import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.myapplication2.util.HttpUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -37,10 +39,11 @@ public class MainActivity extends AppCompatActivity {
 
         // SharedPreferences GET TEST
         SharedPreferences sharedPref = getSharedPreferences("loginKey", Context.MODE_PRIVATE);
+        String userId = sharedPref.getString("userId","값 없음");
         String loginKey = sharedPref.getString("loginKey","값 없음");
         String refreshKey = sharedPref.getString("refreshKey","값 없음");
 
-        Log.d("SharedPreferences","SharedPreferences's loginKey :"+loginKey+" , refreshKey : "+refreshKey);
+        Log.d("SharedPreferences","SharedPreferences's loginKey :"+loginKey+" , refreshKey : "+refreshKey + " , userId : "+userId);
         // SharedPreferences GET TEST
 
         // WebView remote debug 설정
@@ -138,11 +141,44 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void callShopList(View view){
+    public void checkTokenTest(View view){
 
-        Intent intent = new Intent(this, ShopListActivity.class);
+        // token 체크 테스트
+        // SharedPreferences GET TEST
+        SharedPreferences sharedPref = getSharedPreferences("loginKey", Context.MODE_PRIVATE);
+        final String userId = sharedPref.getString("userId","");
+        final String loginKey = sharedPref.getString("loginKey","");
+        final String refreshKey = sharedPref.getString("refreshKey","");
+        // token 체크 테스트
 
-        startActivity(intent);
+        if(false == userId.equals("") && false == loginKey.equals("") && false == refreshKey.equals("")){
+            //
+            new Thread(){
+                public void run(){
+
+                    try{
+                        String loginResult = HttpUtil.sendPostData("https://m.delivera.co.kr/api/searchToken.json","userId="+userId+"&loginKey="+loginKey+"&refreshKey="+refreshKey);
+
+                        Log.d("token 체크",loginResult);
+
+                        JSONObject result = new JSONObject(loginResult);
+
+                        if(result.get("status").equals("1")){  // 로그인 성공
+
+                            Log.d("token 체크","loginKey , refreshKey 모두 일치");
+
+                        }else{  // 로그인 실패
+                            Log.e("token 체크","token 체크 (status="+result.get("status")+")");
+                        }
+
+                    }catch(Exception e){
+                        Log.e("token 체크",e+"");
+                    }
+
+                }
+            }.start();
+        }
+
     }
 
     public static String callPostAPI(String urlStr,String param){
