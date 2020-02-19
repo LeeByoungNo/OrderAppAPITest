@@ -19,6 +19,7 @@
         <activity android:name=".UserFavoriteShopActivity" />
         <activity android:name=".ShopListActivity" />
         <activity android:name=".ShopReviewListActivity" />
+        <activity android:name=".AdmNoticeListActivity"></activity>
         <activity android:name=".AdListActivity" />
         <activity android:name=".WebViewActivity" />
         <activity android:name=".UiTestActivity" /> <!-- FCM Test -->
