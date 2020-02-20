@@ -86,6 +86,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void favoriteShop(View view){
+        Intent intent = new Intent(this, UserFavoriteShopActivity.class);
+
+        startActivity(intent);
+    }
+
     public void goMainAcitivity(View view){
         Intent intent = new Intent(this, AppMainUiActivity.class);
 

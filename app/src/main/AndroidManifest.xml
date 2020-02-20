@@ -15,6 +15,7 @@
             android:label="테스트"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".ShopInfoActivity" />
+        <activity android:name=".UserFavoriteShopActivity" />
         <activity android:name=".ShopListActivity" />
         <activity android:name=".ShopReviewListActivity" />
         <activity android:name=".AdListActivity" />

@@ -193,7 +193,59 @@ public class HttpUtil {
 
         return result ;
     }
+    public static String sendPostData(String apiUrl,String data,String loginKey) throws Exception {
 
+        BufferedReader br = null;
+        String result = "" ;
+
+        try {
+            URL url = new URL(apiUrl);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+
+
+            conn.setRequestMethod("POST"); // 보내는 타입
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setRequestProperty("loginKey", loginKey);
+
+            byte[] bytePostData	= data.getBytes(); // encoding
+            int postDataLength	= bytePostData.length;
+            conn.setRequestProperty("Content-Length", Integer.toString(postDataLength));
+            conn.setUseCaches(false);
+            conn.getOutputStream().write(bytePostData);
+
+            OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream());
+
+            // Data setting
+            osw.write(data);
+
+            // Data 전송
+//			osw.flush();
+
+            int statusCode = conn.getResponseCode() ;
+
+//            System.out.println("statusCode : "+statusCode);
+
+            // Return Data 수신
+            br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+            String line;
+            while((line = br.readLine()) != null) {
+                result = result + line.trim();
+            }
+        }catch(Exception e) {
+            throw e ;
+        }finally {
+            if(br != null) {
+                br.close();
+            }
+        }
+
+        return result ;
+    }
     public static String sendPostData(String apiUrl,String data) throws Exception {
 
         BufferedReader br = null;
