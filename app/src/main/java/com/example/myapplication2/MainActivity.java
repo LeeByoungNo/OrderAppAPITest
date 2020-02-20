@@ -95,6 +95,15 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void testTabLayout(View view){
+//        Intent intent = new Intent(this, WebViewActivity.class);
+
+        Intent intent = new Intent(this, TestTabLayoutActivity.class);
+
+
+        startActivity(intent);
+    }
+
     public void goMainAcitivity(View view){
         Intent intent = new Intent(this, AppMainUiActivity.class);
 

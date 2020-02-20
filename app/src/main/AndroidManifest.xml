@@ -10,10 +10,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".TestTabLayoutActivity"></activity>
         <activity
             android:name=".AppMainUiActivity"
             android:label="테스트"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ShopInfoActivity" />
         <activity android:name=".UserFavoriteShopActivity" />
         <activity android:name=".ShopListActivity" />
