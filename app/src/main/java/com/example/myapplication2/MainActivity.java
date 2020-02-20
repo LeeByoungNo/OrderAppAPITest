@@ -87,7 +87,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void favoriteShop(View view){
+//        Intent intent = new Intent(this, WebViewActivity.class);
+
         Intent intent = new Intent(this, UserFavoriteShopActivity.class);
+
 
         startActivity(intent);
     }
