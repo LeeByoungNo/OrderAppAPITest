@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import com.bumptech.glide.Glide;
 
 
 public class BannerImageShowFragment extends Fragment {
+
+    private String TAG = "FRAGMENT Banner" ;
 
     private ImageView mImageView ;
 
@@ -30,6 +33,8 @@ public class BannerImageShowFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_banner_show,container,false) ;
+
+        Log.d(TAG,"onCreateView");
 
         mImageView = v.findViewById(R.id.fragment_banner_image);
 
