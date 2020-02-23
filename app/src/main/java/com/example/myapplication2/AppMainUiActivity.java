@@ -1,6 +1,7 @@
 package com.example.myapplication2;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
@@ -31,6 +32,7 @@ import android.view.Menu;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -44,7 +46,7 @@ public class AppMainUiActivity extends AppCompatActivity {
     private RecyclerView recyclerView ;
     private RecyclerView.LayoutManager layoutManager ;
 
-    private RecyclerView.Adapter mAdapter ;
+    private List<JSONObject> categoryList = new ArrayList<JSONObject>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,52 +63,60 @@ public class AppMainUiActivity extends AppCompatActivity {
         layoutManager = new GridLayoutManager(this,3);
         recyclerView.setLayoutManager(layoutManager);
 
-        final List<JSONObject> categoryList = new ArrayList<JSONObject>();
+        setupAdapter();
 
-        try{
-            JSONObject allCategory = new JSONObject();
-            allCategory.put("code","0");
-            allCategory.put("codeName","전체");
-            categoryList.add(allCategory);
-        }catch (Exception e){
-            Log.e("ERROR","error",e);
-        }
+        // TEST ===============================
+        new FetchCategoryTask().execute();
 
-
-        new Thread(){
-            public void run(){
-
-                try{
-                    String result = HttpUtil.sendGetData("https://m.delivera.co.kr/api/categoryList.json","");
-
-                    Log.d("API","RESULT: "+result);
-                    final JSONObject jsonObject = new JSONObject(result);
-
-                    //
-                    if(jsonObject.get("status").equals("1")) {
-
-                        JSONArray data = jsonObject.getJSONArray("data");
-                        if(data != null) {
-                            for(int j=0; j < data.length() ; j++) {
-                                JSONObject categoryInfo = data.getJSONObject(j);
-                                //
-                                Log.d("상점 카테고리: 이름 => ",j+":" +categoryInfo.getString("codeName"));
-                                categoryList.add(categoryInfo);
-                            }
-                        }
-                    }
-                    mAdapter.notifyDataSetChanged();
-
-                }catch(Exception e){
-                    Log.d("error",""+e);
-                }
-            }
-        }.start();
-
-        mAdapter = new AppMainUiActivity.ShopCategoryAdapter(categoryList);
-        recyclerView.setAdapter(mAdapter);
     }
 
+    private void setupAdapter(){
+
+        recyclerView.setAdapter(new AppMainUiActivity.ShopCategoryAdapter(categoryList));
+    }
+
+    private class FetchCategoryTask extends AsyncTask{
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+
+            try{
+
+                JSONObject allCategory = new JSONObject();
+                allCategory.put("code","0");
+                allCategory.put("codeName","전체");
+                categoryList.add(allCategory);
+
+                String result = HttpUtil.sendGetData("https://m.delivera.co.kr/api/categoryList.json","");
+
+                Log.d("API","RESULT: "+result);
+                final JSONObject jsonObject = new JSONObject(result);
+
+                if(jsonObject.get("status").equals("1")) {
+
+                    JSONArray data = jsonObject.getJSONArray("data");
+                    if(data != null) {
+                        for(int j=0; j < data.length() ; j++) {
+                            JSONObject categoryInfo = data.getJSONObject(j);
+                            //
+                            Log.d("상점 카테고리: 이름 => ",j+":" +categoryInfo.getString("codeName"));
+                            categoryList.add(categoryInfo);
+                        }
+                    }
+                }
+
+            }catch(Exception e){
+                Log.d("error",""+e);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            setupAdapter();
+        }
+    }
 
     private class ShopCategoryAdapter extends RecyclerView.Adapter<ShopCateogryHolder>{
 
@@ -144,15 +154,12 @@ public class AppMainUiActivity extends AppCompatActivity {
 
         JSONObject categoryInfo ;
 
-        public ImageButton mCategoryButton ;
+        public ImageView mCategoryButton ;
 
         public ShopCateogryHolder(@NonNull View itemView) {
             super(itemView);
 
             mCategoryButton = itemView.findViewById(R.id.shop_category_element);
-
-
-
         }
 
         public void bindShopCategory(JSONObject categoryInfo){

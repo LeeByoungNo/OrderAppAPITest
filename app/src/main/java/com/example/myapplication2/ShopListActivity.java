@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -35,11 +36,13 @@ public class ShopListActivity extends AppCompatActivity {
     private RecyclerView recyclerView ;
     private RecyclerView.LayoutManager layoutManager;
 
-    private RecyclerView.Adapter mAdapter ;
+//    private RecyclerView.Adapter mAdapter ;
 
     // Handler TEST ==================
     private Handler myHandler ;
     // Handler TEST ==================
+
+    private List<JSONObject> shopList = new ArrayList<JSONObject>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,47 +76,62 @@ public class ShopListActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        mAdapter = new ShopListAdapter(null);
-        recyclerView.setAdapter(mAdapter);
+        setupAdapter();
 
-        final List<JSONObject> shopList = new ArrayList<JSONObject>();
+        // TEST ===============================
+        new FetchShopListTask().execute(toSearchType);
+        // TEST ===============================
 
-        new Thread(){
-            public void run(){
+    }
 
-                String spCode = "J00001002000003" ;
+    private void setupAdapter(){
 
-                try{
 
-                    String result = HttpUtil.sendPostData("https://m.delivera.co.kr/api/storeListDeli.json","type="+(toSearchType.equals("0")?"":toSearchType)+"&x=37.4732219&y=126.8843009&pageSize=20&pageNo=1");
+        recyclerView.setAdapter(new ShopListAdapter(shopList));
+    }
 
-                    Log.d("API","RESULT: "+result);
-                    final JSONObject jsonObject = new JSONObject(result);
+    private class FetchShopListTask extends AsyncTask<String,Void,Void>{
 
-                    //
-                    if(jsonObject.get("status").equals("1")) {
 
-                        JSONArray data = jsonObject.getJSONArray("data");
-                        if(data != null) {
-                            for(int j=0; j < data.length() ; j++) {
-                                JSONObject shopInfo = data.getJSONObject(j);
-                                //
-                                Log.d("상점 테스트: 내용 => ",j+":" +shopInfo.getString("spCode"));
-                                shopList.add(shopInfo);
-                            }
+        @Override
+        protected Void doInBackground(String... params) {
+
+            // ================================= TEST ==========================
+            String spCode = "J00001002000003" ;
+
+            try{
+
+                String result = HttpUtil.sendPostData("https://m.delivera.co.kr/api/storeListDeli.json","type="+(params[0].equals("0")?"":params[0])+"&x=37.4732219&y=126.8843009&pageSize=20&pageNo=1");
+
+                Log.d("API","RESULT: "+result);
+                final JSONObject jsonObject = new JSONObject(result);
+
+                //
+                if(jsonObject.get("status").equals("1")) {
+
+                    JSONArray data = jsonObject.getJSONArray("data");
+                    if(data != null) {
+                        for(int j=0; j < data.length() ; j++) {
+                            JSONObject shopInfo = data.getJSONObject(j);
+
+                            Log.d("상점 테스트: 내용 => ",j+":" +shopInfo.getString("spCode"));
+                            shopList.add(shopInfo);
                         }
                     }
-                    mAdapter.notifyDataSetChanged();
-
-                }catch(Exception e){
-                    Log.d("error",""+e);
                 }
+
+            }catch(Exception e){
+                Log.d("error",""+e);
             }
-        }.start();
+            // ================================= TEST ==========================
 
-        mAdapter = new ShopListAdapter(shopList);
-        recyclerView.setAdapter(mAdapter);
+            return null;
+        }
 
+        @Override
+        protected void onPostExecute(Void o) {
+            setupAdapter();
+        }
     }
 
     private class ShopListAdapter extends RecyclerView.Adapter<ShopListAdapter.ShopItemHolder>{
@@ -168,7 +186,6 @@ public class ShopListActivity extends AppCompatActivity {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //
 
                         Intent intent = new Intent(getApplication(), ShopInfoActivity.class);
 
@@ -215,9 +232,6 @@ public class ShopListActivity extends AppCompatActivity {
 
                     // 상점 image 표출
                     Glide.with(getApplicationContext()).load(adminPathImage).into(mShopImage);
-
-
-
 
                 }catch (Exception e){
 

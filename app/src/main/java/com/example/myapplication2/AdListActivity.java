@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
@@ -41,6 +42,8 @@ public class AdListActivity extends AppCompatActivity {
 
     private RecyclerView.Adapter adListAdapter ;
 
+    private List<JSONObject> advertiseList = new ArrayList<JSONObject>();
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -73,11 +76,11 @@ public class AdListActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        final List<JSONObject> advertiseList = new ArrayList<JSONObject>();
+//        final List<JSONObject> advertiseList = new ArrayList<JSONObject>();
 
         // data GET =================================================================
-        new Thread(){
-            public void run(){
+       /* new Thread(){
+            public void run(){*//*
 
                 try{
 
@@ -114,9 +117,9 @@ public class AdListActivity extends AppCompatActivity {
                             for(int j=0; j < data.length() ; j++) {
                                 JSONObject adInfo = data.getJSONObject(j);
                                 // null check
-                                /*if(false == adInfo.isNull("htmlUrl")) {
+                                *//**//*if(false == adInfo.isNull("htmlUrl")) {
                                     dataInfo.put("html_url", (String)adInfo.get("htmlUrl"));
-                                }*/
+                                }*//**//*
                                 advertiseList.add(adInfo);
                             }
                         }
@@ -129,13 +132,85 @@ public class AdListActivity extends AppCompatActivity {
                     Log.d("error",""+e);
                 }
             }
-        }.start();
+        }.start();*/
         // data GET =================================================================
 
-        Log.d("DEBUG","onCreate 's "+advertiseList.size());
+//        Log.d("DEBUG","onCreate 's "+advertiseList.size());
 
-        adListAdapter = new AdListAdapter(advertiseList);
-        recyclerView.setAdapter(adListAdapter);
+/*        adListAdapter = new AdListAdapter(advertiseList);
+        recyclerView.setAdapter(adListAdapter);*/
+
+        setupAdapter();
+
+        new FetchAdListTask().execute("");
+
+    }
+
+    private void setupAdapter(){
+        recyclerView.setAdapter(new AdListAdapter(advertiseList));
+    }
+    private class FetchAdListTask extends AsyncTask<String,Void,Void>{
+
+        @Override
+        protected Void doInBackground(String... strings) {
+
+            try{
+
+                String result = HttpUtil.sendPostData("https://m.delivera.co.kr/api/totalAdList.json","");
+
+                Log.d("API","RESULT: "+result);
+
+
+                JSONObject jsonObjTotalAdList =  new JSONObject(result);
+                if(jsonObjTotalAdList.get("status").equals("1")) {
+
+                    JSONArray data = jsonObjTotalAdList.getJSONArray("data");
+
+                    if(data != null) {
+                        for(int j=0; j < data.length() ; j++) {
+
+                            JSONObject adInfo = data.getJSONObject(j);
+                            Log.d("debug",adInfo.get("subject")+""+adInfo.get("regDate"));
+
+                            advertiseList.add(adInfo);
+                        }
+                    }
+                }
+
+                // 일반광고
+                result = HttpUtil.sendPostData("https://m.delivera.co.kr/api/publicAdList.json", "mode=A");
+
+                JSONObject jsonObj =  new JSONObject(result);
+                if(jsonObj.get("status").equals("1")) {
+
+                    JSONArray data = jsonObj.getJSONArray("data");
+
+                    if(data != null) {
+                        for(int j=0; j < data.length() ; j++) {
+                            JSONObject adInfo = data.getJSONObject(j);
+                            // null check
+                                /*if(false == adInfo.isNull("htmlUrl")) {
+                                    dataInfo.put("html_url", (String)adInfo.get("htmlUrl"));
+                                }*/
+                            advertiseList.add(adInfo);
+                        }
+                    }
+                }
+                // 일반광고
+
+                adListAdapter.notifyDataSetChanged();
+
+            }catch(Exception e){
+                Log.d("error",""+e);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            setupAdapter();
+        }
     }
 
     private class AdListAdapter extends RecyclerView.Adapter<AdListAdapter.AdInfoHolder>{

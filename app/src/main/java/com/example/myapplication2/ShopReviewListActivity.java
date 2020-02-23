@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +30,8 @@ public class ShopReviewListActivity extends AppCompatActivity {
 
     private RecyclerView.Adapter mAdapter ;
 
+    private List<JSONObject> reviewList = new ArrayList<JSONObject>() ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +51,7 @@ public class ShopReviewListActivity extends AppCompatActivity {
 
 //       final List<String> reviewList = new ArrayList<String>();
 
-        final List<JSONObject> reviewList = new ArrayList<JSONObject>();
+        /*final List<JSONObject> reviewList = new ArrayList<JSONObject>();
 
         new Thread(){
             public void run(){
@@ -80,8 +83,8 @@ public class ShopReviewListActivity extends AppCompatActivity {
 
                     }
 
-                    /*mAdapter = new MyAdapter(reviewList);
-                    recyclerView.setAdapter(mAdapter);*/
+                    *//*mAdapter = new MyAdapter(reviewList);
+                    recyclerView.setAdapter(mAdapter);*//*
 
                     mAdapter.notifyDataSetChanged();
 
@@ -95,8 +98,59 @@ public class ShopReviewListActivity extends AppCompatActivity {
         }.start();
 
         mAdapter = new MyAdapter(reviewList);
-        recyclerView.setAdapter(mAdapter);
+        recyclerView.setAdapter(mAdapter);*/
 
+        setupAdapter();
+
+        new FetchReviewListTask().execute("");
+
+    }
+
+    private void setupAdapter(){
+        recyclerView.setAdapter(new MyAdapter(reviewList));
+    }
+
+    private class FetchReviewListTask extends AsyncTask<String,Void,Void>{
+        @Override
+        protected Void doInBackground(String... strings) {
+
+            String spCode = "J00001002000003" ;
+
+            try{
+
+                String result = HttpUtil.sendPostData("https://m.delivera.co.kr/api/shopReviewList.json","spCode="+spCode+"&pageSize=20&pageNo=1");
+
+                Log.d("API","RESULT: "+result);
+                final JSONObject jsonObject = new JSONObject(result);
+
+                //
+                if(jsonObject.get("status").equals("1")) {
+
+                    JSONArray data = jsonObject.getJSONArray("data");
+                    if(data != null) {
+                        for(int j=0; j < data.length() ; j++) {
+                            JSONObject reviewInfo = data.getJSONObject(j);
+
+                            Log.d("리뷰 테스트: 내용 => ",j+":" +reviewInfo.getString("content"));
+
+                            reviewList.add(reviewInfo);
+                        }
+
+                    }
+
+                }
+
+            }catch(Exception e){
+                Log.d("error",""+e);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            setupAdapter();
+        }
     }
 
     private class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
